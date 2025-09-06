@@ -1,17 +1,13 @@
-# === prediction_model.py ===
-import joblib
-import numpy as np
-import os
+# prediction_model.py — loader for v2 (no custom class)
+import os, joblib, numpy as np
+MODEL_V2 = os.path.join("model", "return_days_model_fixed_features_v2.pkl")
+B = joblib.load(MODEL_V2)
 
-# ✅ Correct filenames
-model_path = os.path.join("model", "xgb_regressor_model.pkl")
-scaler_path = os.path.join("model", "scaler_for_xgb.pkl")
-
-# ✅ Load model and scaler with joblib
-model = joblib.load(model_path)
-scaler = joblib.load(scaler_path)
-
-def predict_holding_days(input_features):
-    input_array = np.array(input_features).reshape(1, -1)
-    scaled_input = scaler.transform(input_array)
-    return model.predict(scaled_input)[0]
+def predict_holding_days(features):
+    X = np.asarray([features], dtype=float)
+    preds = []
+    if B["rf"]  is not None: preds.append(B["rf"].predict(X))
+    if B["gbr"] is not None: preds.append(B["gbr"].predict(X))
+    if B["xgb"] is not None: preds.append(B["xgb"].predict(X))
+    y = np.column_stack(preds).mean(axis=1)
+    return float(y[0])

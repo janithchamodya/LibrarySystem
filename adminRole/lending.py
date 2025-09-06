@@ -339,7 +339,11 @@ class lending:
                 if pages <= 0:
                     self.show_validation_error("pages", "Pages must be greater than 0!")
                     return
-
+                today = datetime.now() 
+                year_val = today.year        # 2025
+                month_val = today.month      # 9
+                day_val = today.day  
+                
                 # Get selected values from radio buttons
                 user_role = self.user_role.get()
                 book_category = self.book_category.get()
@@ -347,6 +351,9 @@ class lending:
                 # Prepare features for prediction
                 features = [
                     pages,
+                    day_val,  
+                    year_val ,	
+                    month_val ,	
                     1 if user_role == "staff" else 0,
                     1 if user_role == "student" else 0,
                     1 if book_category == "fiction" else 0,
@@ -357,7 +364,20 @@ class lending:
                     int(book_id)
                 ]
 
-            
+                print(
+                        "pages: " + str(pages) +
+                        " | day_val: " + str(day_val) +
+                        " | year_val: " + str(year_val) +
+                        " | month_val: " + str(month_val) +
+                        " | role_staff: " + str(1 if user_role.lower() == "staff" else 0) +
+                        " | role_student: " + str(1 if user_role.lower() == "student" else 0) +
+                        " | cat_fiction: " + str(1 if book_category.lower() == "fiction" else 0) +
+                        " | cat_history: " + str(1 if book_category.lower() == "history" else 0) +
+                        " | cat_non_fiction: " + str(1 if book_category.lower() == "non-fiction" else 0) +
+                        " | cat_science: " + str(1 if book_category.lower() == "science" else 0) +
+                        " | user_id: " + str(user_id) +
+                        " | book_id: " + str(book_id)
+                    )
                 conn = self.db.connect()
                 cursor = conn.cursor()
 
@@ -419,12 +439,12 @@ class lending:
                     return_date,
                     int(prediction),
                     pages,
-                    features[1],  # user_role_staff
-                    features[2],  # user_role_student
-                    features[3],  # book_category_fiction
-                    features[4],  # book_category_history
-                    features[5],  # book_category_nonfiction
-                    features[6]   # book_category_science
+                    features[4],  # user_role_staff
+                    features[5],  # user_role_student
+                    features[6],  # book_category_fiction
+                    features[7],  # book_category_history
+                    features[8],  # book_category_nonfiction
+                    features[9]   # book_category_science
                 )
                 cursor.execute(sql, values)
                 conn.commit()
