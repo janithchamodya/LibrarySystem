@@ -142,8 +142,8 @@ class MemberManagement:
         email = self.entries["email"].get().strip()
         contact = self.entries["contact"].get().strip()
 
-        if not re.fullmatch(r'\d{3}', member_id):
-            messagebox.showwarning("Input Error", "Member ID must be exactly 3 digits (numbers only).")
+        if not re.fullmatch(r'\d{1}', member_id):
+            messagebox.showwarning("Input Error", "Member ID must be exactly 1 digits (numbers only).")
             return None
         if not name:
             messagebox.showwarning("Input Error", "Name is required.")

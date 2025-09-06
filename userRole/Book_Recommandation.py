@@ -435,7 +435,7 @@ class BookRecommendation:
                 cur.execute(
                     """
                     SELECT book_id
-                    FROM library_db.books
+                    FROM books
                     WHERE book_name = %s AND author = %s
                     """,
                     (title, author)
@@ -446,7 +446,7 @@ class BookRecommendation:
                     cur.execute(
                         """
                         SELECT book_id
-                        FROM library_db.books
+                        FROM books
                         WHERE LOWER(book_name) = LOWER(%s) AND LOWER(author) = LOWER(%s)
                         """,
                         (title, author)
@@ -466,7 +466,7 @@ class BookRecommendation:
               
                 cur.execute(
                     """
-                    INSERT INTO library_db.user_notifications
+                    INSERT INTO user_notifications
                         (user_id, book_id, book_title, book_author, image_url, created_at)
                     VALUES (%s, %s, %s, %s, %s, NOW())
                     """,
